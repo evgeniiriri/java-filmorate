@@ -11,11 +11,9 @@ import java.time.LocalDate;
 @Data
 public class User {
     private Long id;
-    @NotNull
     @NotBlank
     @Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")
     private String email;
-    @NotNull
     @NotBlank
     @Pattern(regexp = "^\\S*$")
     private String login;
