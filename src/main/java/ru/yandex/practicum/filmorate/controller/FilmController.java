@@ -43,12 +43,13 @@ public class FilmController {
             oldFilm.setDuration(newFilm.getDuration());
             return oldFilm;
         }
-        throw new ValidationException("Фильм с id = " + newFilm.getId() + " не найден");
+        throw new ValidationException("Фильм с id - " + newFilm.getId() + " не найден");
     }
 
     private void validDate(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.warn("Переданная дата релиза фильма [{}] не может быть меньше 1895.12.28", film.getReleaseDate());
+            log.warn("У фильма с ID - [{}], name - [{}], releaseDate - [{}] некорректная дата релиза. Меньше 1895.12.28",
+                    film.getId(), film.getName(), film.getReleaseDate());
             throw new ValidationException("Не верная дата релиза.");
         }
     }

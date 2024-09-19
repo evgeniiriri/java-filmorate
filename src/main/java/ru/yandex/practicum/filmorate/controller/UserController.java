@@ -26,7 +26,7 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         if (user.getName() == null || user.getName().isBlank()) {
-            log.info("У пользователя {} для поля name используется поле login.", user);
+            log.info("У пользователя с ID - [{}] для поля name используется поле login - [{}].", user.getId(), user.getLogin());
             user.setName(user.getLogin());
         }
         user.setId(getNextId());
@@ -39,7 +39,7 @@ public class UserController {
         if (users.containsKey(newUser.getId())) {
             User oldUser = users.get(newUser.getId());
             if (newUser.getName() == null || newUser.getName().isBlank()) {
-                log.info("У пользователя {} для поля name используется поле login.", newUser);
+                log.info("У пользователя с ID - [{}] для поля name используется поле login - [{}].", newUser.getId(), newUser.getLogin());
                 newUser.setName(newUser.getLogin());
             }
 
@@ -50,8 +50,9 @@ public class UserController {
 
             return oldUser;
         } else {
-            log.warn("Пользователь с id = {} не найден", newUser.getId());
-            throw new NotFoundException("Пользователь с id = " + newUser.getId() + " не найден");
+            log.warn("Пользователь с id - [{}], name - [{}], login - [{}], email - [{}] не найден",
+                    newUser.getId(), newUser.getName(), newUser.getLogin(), newUser.getEmail());
+            throw new NotFoundException("Пользователь с id - " + newUser.getId() + " не найден");
         }
     }
 
