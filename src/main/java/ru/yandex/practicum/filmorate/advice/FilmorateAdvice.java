@@ -19,13 +19,11 @@ public class FilmorateAdvice {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorMessage> ValidationExceptionHandler(ValidationException e) {
-        String message = String.format("%s %s %s", LocalDateTime.now(), e.getMessage(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(new ErrorMessage(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> anyExceptionHandler(Exception e) {
-        String message = String.format("%s %s %s", LocalDateTime.now(), e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(new ErrorMessage(e.getMessage(), LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

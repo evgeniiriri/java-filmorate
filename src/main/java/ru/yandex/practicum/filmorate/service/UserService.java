@@ -101,12 +101,4 @@ public class UserService {
 
         return userStorage.getUserById(idUser).get();
     }
-
-
-    private void validationUserInStorage(Long id) {
-        if (userStorage.getUserById(id).isEmpty()) {
-            log.warn("Пользователя с ID - [{}] нет.", id);
-            throw new NotFoundException("Пользователя с ID - [" + id + "] нет");
-        }
-    }
 }
