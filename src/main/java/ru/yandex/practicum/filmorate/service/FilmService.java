@@ -2,9 +2,11 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.FilmorateNotFoundException;
 import ru.yandex.practicum.filmorate.exception.FilmorateValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -15,10 +17,12 @@ import java.util.stream.Collectors;
 public class FilmService {
 
     private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage) {
+    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
         this.filmStorage = filmStorage;
+        this.userStorage = userStorage;
     }
 
     public Collection<Film> findAll() {
@@ -34,10 +38,16 @@ public class FilmService {
     }
 
     public Film setLikeByUser(Long idUser, Long idFilm) {
+        if (userStorage.getUserById(idUser).isEmpty()) {
+            throw new FilmorateNotFoundException("Пользователя с ID - [" + idUser +"] нет");
+        }
         return filmStorage.setLikeByUserId(idUser, idFilm);
     }
 
     public Film deleteLikeByUser(Long idUser, Long idFilm) {
+        if (userStorage.getUserById(idUser).isEmpty()) {
+            throw new FilmorateNotFoundException("Пользователя с ID - [" + idUser +"] нет");
+        }
         return filmStorage.deleteLikeByUserId(idUser, idFilm);
     }
 
