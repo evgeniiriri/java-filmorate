@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 public class FilmorateAdvice {
 
     @ExceptionHandler(FilmorateNotFoundException.class)
-    public ResponseEntity<ErrorMessage> NotFoundExceptionHandler(FilmorateNotFoundException e) {
+    public ResponseEntity<ErrorMessage> notFoundExceptionHandler(FilmorateNotFoundException e) {
         return new ResponseEntity<>(new ErrorMessage(e.getMessage(), LocalDateTime.now(), HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(FilmorateValidationException.class)
-    public ResponseEntity<ErrorMessage> ValidationExceptionHandler(FilmorateValidationException e) {
+    public ResponseEntity<ErrorMessage> validationExceptionHandler(FilmorateValidationException e) {
         return new ResponseEntity<>(new ErrorMessage(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
