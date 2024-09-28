@@ -8,7 +8,10 @@ import java.util.Optional;
 public interface UserStorage {
 
     User create(User user);
+
     User update(User user);
+
     Collection<User> getAllUsers();
+
     Optional<User> getUserById(Long Id);
 }

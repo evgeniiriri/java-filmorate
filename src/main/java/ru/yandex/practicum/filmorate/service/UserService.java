@@ -85,14 +85,14 @@ public class UserService {
     }
 
     public User deletedFriends(Long idUser, Long idFriend) {
-        
-        if (userStorage.getUserById(idUser).isPresent()){
+
+        if (userStorage.getUserById(idUser).isPresent()) {
             userStorage.getUserById(idUser).get().deletedFriend(idFriend);
         } else {
             log.warn("Невозможно удалить из друзей пользователя с ID - [{}], так как его нет.", idFriend);
             throw new FilmorateNotFoundException("Пользователя с ID - [" + idFriend + "] нет");
         }
-        if (userStorage.getUserById(idFriend).isPresent()){
+        if (userStorage.getUserById(idFriend).isPresent()) {
             userStorage.getUserById(idFriend).get().deletedFriend(idUser);
         } else {
             log.warn("Невозможно удалить из друзей пользователя с ID - [{}], так как его нет.", idUser);
