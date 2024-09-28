@@ -23,8 +23,8 @@ public class FilmorateAdvice {
         return new ResponseEntity<>(new ErrorMessage(e.getMessage(), LocalDateTime.now(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorMessage> anyExceptionHandler(Exception e) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorMessage> anyExceptionHandler(RuntimeException e) {
         return new ResponseEntity<>(new ErrorMessage(e.getMessage(), LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
