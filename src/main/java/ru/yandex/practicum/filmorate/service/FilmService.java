@@ -39,14 +39,14 @@ public class FilmService {
 
     public Film setLikeByUser(Long idUser, Long idFilm) {
         if (userStorage.getUserById(idUser).isEmpty()) {
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + idUser +"] нет");
+            throw new FilmorateNotFoundException("Пользователя с ID - [" + idUser + "] нет");
         }
         return filmStorage.setLikeByUserId(idUser, idFilm);
     }
 
     public Film deleteLikeByUser(Long idUser, Long idFilm) {
         if (userStorage.getUserById(idUser).isEmpty()) {
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + idUser +"] нет");
+            throw new FilmorateNotFoundException("Пользователя с ID - [" + idUser + "] нет");
         }
         return filmStorage.deleteLikeByUserId(idUser, idFilm);
     }
