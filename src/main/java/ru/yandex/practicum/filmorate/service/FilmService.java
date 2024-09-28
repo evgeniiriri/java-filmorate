@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.FilmorateValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -43,7 +43,7 @@ public class FilmService {
 
     public Collection<Film> getPopularFilms(int count) {
         if (count <= 0) {
-            throw new ValidationException("Значение  count должно быть выше 0.");
+            throw new FilmorateValidationException("Значение  count должно быть выше 0.");
         }
         return filmStorage.getAll().stream()
                 .sorted(Comparator.comparing(Film::getCountLikes).reversed())

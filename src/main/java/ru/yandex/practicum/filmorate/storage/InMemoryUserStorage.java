@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.FilmorateNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
@@ -45,7 +45,7 @@ public class InMemoryUserStorage implements UserStorage{
         } else {
             log.warn("Пользователь с id - [{}], name - [{}], login - [{}], email - [{}] не найден",
                     newUser.getId(), newUser.getName(), newUser.getLogin(), newUser.getEmail());
-            throw new NotFoundException("Пользователь с id - " + newUser.getId() + " не найден");
+            throw new FilmorateNotFoundException("Пользователь с id - " + newUser.getId() + " не найден");
         }
     }
 
@@ -58,7 +58,7 @@ public class InMemoryUserStorage implements UserStorage{
     public Optional<User> getUserById(Long id) {
         if (!users.containsKey(id)) {
             log.warn("Пользователь с id - [{}] не найден", id);
-            throw new NotFoundException("Пользователь с id - " + id + " не найден");
+            throw new FilmorateNotFoundException("Пользователь с id - " + id + " не найден");
         }
         return users.values().stream()
                 .filter(user -> Objects.equals(user.getId(), id))

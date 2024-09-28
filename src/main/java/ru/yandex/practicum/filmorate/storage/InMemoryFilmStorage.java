@@ -3,8 +3,8 @@ package ru.yandex.practicum.filmorate.storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.exception.FilmorateNotFoundException;
+import ru.yandex.practicum.filmorate.exception.FilmorateValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
@@ -38,7 +38,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
             return oldFilm;
         }
-        throw new NotFoundException("Фильм с id - " + newFilm.getId() + " не найден");
+        throw new FilmorateNotFoundException("Фильм с id - " + newFilm.getId() + " не найден");
     }
 
     @Override
@@ -47,7 +47,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (!films.containsKey(film.getId())) {
             log.warn("У фильма с ID - [{}], name - [{}], releaseDate - [{}] не найден.",
                     film.getId(), film.getName(), film.getReleaseDate());
-            throw new ValidationException("Фильм с id - " + film.getId() + " не найден");
+            throw new FilmorateValidationException("Фильм с id - " + film.getId() + " не найден");
         }
         films.remove(film.getId());
         return film;
@@ -84,13 +84,13 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             log.warn("У фильма с ID - [{}], name - [{}], releaseDate - [{}] некорректная дата релиза. Меньше 1895.12.28",
                     film.getId(), film.getName(), film.getReleaseDate());
-            throw new ValidationException("Не верная дата релиза.");
+            throw new FilmorateValidationException("Не верная дата релиза.");
         }
     }
 
     private void validationIdFilm(Long idFilm) {
         if (!films.containsKey(idFilm)) {
-            throw new NotFoundException("Фильма с ID - " + idFilm + " не нашлось.");
+            throw new FilmorateNotFoundException("Фильма с ID - " + idFilm + " не нашлось.");
         }
     }
 
