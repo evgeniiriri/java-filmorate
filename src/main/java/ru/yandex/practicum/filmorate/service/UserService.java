@@ -32,14 +32,13 @@ public class UserService {
     }
 
     public User update(User user) {
+        validateIdUser(user.getId(), "Невозможно обновить пользователя с ID - [{}], так как его нет.");
         return userStorage.update(user);
     }
 
     public Collection<User> getFriends(Long id) {
-        if (userStorage.getUserById(id).isEmpty()) {
-            log.warn("Невозможно добавить в друзья пользователя с ID - [{}], так как его нет.", id);
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + id + "] нет");
-        }
+        validateIdUser(id, "Невозможно показать друзей пользователя с ID - [{}], так как его нет.");
+
         Set<Long> friends = userStorage.getUserById(id).get().getFriends();
         return userStorage.getAllUsers().stream()
                 .filter(user -> friends.contains(user.getId()))
@@ -47,14 +46,8 @@ public class UserService {
     }
 
     public Collection<User> getCommonFriends(Long id, Long otherId) {
-        if (userStorage.getUserById(id).isEmpty()) {
-            log.warn("Невозможно добавить в друзья пользователя с ID - [{}], так как его нет.", id);
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + id + "] нет");
-        }
-        if (userStorage.getUserById(otherId).isEmpty()) {
-            log.warn("Невозможно добавить в друзья пользователя с ID - [{}], так как его нет.", otherId);
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + otherId + "] нет");
-        }
+        validateIdUser(id, "Невозможно показать общих друзей пользователя с ID - [{}], так как его нет.");
+        validateIdUser(otherId, "Невозможно показать общих друзей пользователя с ID - [{}], так как его нет.");
 
         Set<Long> listFriendsUser = userStorage.getUserById(id).get().getFriends();
         Set<Long> listFriendsOtherUser = userStorage.getUserById(otherId).get().getFriends();
@@ -68,15 +61,8 @@ public class UserService {
 
 
     public User addFriend(Long idUser, Long idFriend) {
-
-        if (userStorage.getUserById(idFriend).isEmpty()) {
-            log.warn("Невозможно добавить в друзья пользователя с ID - [{}], так как его нет.", idFriend);
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + idFriend + "] нет");
-        }
-        if (userStorage.getUserById(idUser).isEmpty()) {
-            log.warn("Невозможно добавить в друзья пользователя с ID - [{}], так как его нет.", idUser);
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + idUser + "] нет");
-        }
+        validateIdUser(idUser, "Невозможно добавить в друзья пользователя с ID - [{}], так как его нет.");
+        validateIdUser(idFriend, "Невозможно добавить в друзья пользователя с ID - [{}], так как его нет.");
 
         userStorage.getUserById(idUser).get().addFriend(idFriend);
         userStorage.getUserById(idFriend).get().addFriend(idUser);
@@ -85,20 +71,19 @@ public class UserService {
     }
 
     public User deletedFriends(Long idUser, Long idFriend) {
+        validateIdUser(idUser, "Невозможно удалить из друзей пользователя с ID - [{}], так как его нет.");
+        validateIdUser(idFriend, "Невозможно удалить из друзей пользователя с ID - [{}], так как его нет.");
 
-        if (userStorage.getUserById(idUser).isPresent()) {
-            userStorage.getUserById(idUser).get().deletedFriend(idFriend);
-        } else {
-            log.warn("Невозможно удалить из друзей пользователя с ID - [{}], так как его нет.", idFriend);
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + idFriend + "] нет");
-        }
-        if (userStorage.getUserById(idFriend).isPresent()) {
-            userStorage.getUserById(idFriend).get().deletedFriend(idUser);
-        } else {
-            log.warn("Невозможно удалить из друзей пользователя с ID - [{}], так как его нет.", idUser);
-            throw new FilmorateNotFoundException("Пользователя с ID - [" + idUser + "] нет");
-        }
+        userStorage.getUserById(idUser).get().deletedFriend(idFriend);
+        userStorage.getUserById(idFriend).get().deletedFriend(idUser);
 
         return userStorage.getUserById(idUser).get();
+    }
+
+    private void validateIdUser(Long id, String logMessage) {
+        if (userStorage.getUserById(id).isEmpty()) {
+            log.warn(logMessage, id);
+            throw new FilmorateNotFoundException("Пользователя с ID - [" + id + "] нет");
+        }
     }
 }

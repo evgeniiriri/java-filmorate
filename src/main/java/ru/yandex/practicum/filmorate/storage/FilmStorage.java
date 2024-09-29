@@ -15,7 +15,7 @@ public interface FilmStorage {
 
     Collection<Film> getAll();
 
-    Optional<Film> getById(Long id);
+    Optional<Film> getFilmById(Long id);
 
     Film setLikeByUserId(Long idUser, Long idFilm);
 
